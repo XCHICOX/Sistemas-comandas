@@ -1,0 +1,197 @@
+{% extends "espetocarioca/base.html" %}
+
+{% block content %}
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f5f6fa;
+        color: #333;
+    }
+
+    h1, h2 {
+        color: #6f42c1;
+        margin-bottom: 10px;
+    }
+
+    table {
+        width: 50%;
+        border-collapse: collapse;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    table th {
+        background-color: #6f42c1;
+        color: white;
+    }
+
+    table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    table tr:hover {
+        background-color: #eee;
+    }
+
+    form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+        align-items: center;
+    }
+.form-inline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px; /* espaço entre os inputs */
+    margin-bottom: 15px;
+}
+
+.input-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-field label {
+    font-weight: 500;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.input-field input[type="text"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 200px; /* largura dos inputs, ajuste conforme desejar */
+}
+
+.button {
+    background-color: #000000;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    align-self: flex-start; /* alinha botão ao topo */
+}
+
+.button:hover {
+    background-color: #ff0000;
+}
+
+    .flash-message {
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+
+    .flash-message.success {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .flash-message.error {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+
+</style>
+
+<h1>Cardápio</h1>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <ul>
+            {% for category, message in messages %}
+                <li class="flash-message {{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+<!-- Formulário para Adicionar Item -->
+<h2>Adicionar Item ao Cardápio</h2>
+<form method="post" class="form-inline">
+<div class="input-field">
+    <input type="text" id="nome" name="nome" placeholder="Nome" required>
+</div>
+<div class="input-field">
+    <input type="text" id="valor_de_entrada" name="valor_de_entrada" placeholder="Valor" required>
+</div>
+    <button type="submit" name="adicionar" class="button">Adicionar</button>
+</form>
+
+<!-- Formulário de Busca -->
+<h2>Buscar Itens</h2>
+<form method="get" action="{{ url_for('espettocarioca_cardapio') }}">
+<div class="input-field">
+    <input type="text" id="search" name="search" placeholder="Buscar" value="{{ request.args.get('search', '') }}">
+</div>
+    <button type="submit" class="button">Buscar</button>
+</form>
+
+<!-- Lista de Itens -->
+<h2>Itens do Cardápio</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>R$</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in itens %}
+        <tr>
+            <td>{{ item[0] }}</td>
+            <td>{{ item[1] }}</td>
+            <td>{{ item[2] }}</td>
+            <td>
+                <div class="action-buttons">
+                    <!-- Formulário para Editar Item -->
+                    <form method="post" onsubmit="return confirmAction('Tem certeza que deseja editar este item?')">
+                        <input type="hidden" name="item_id" value="{{ item[0] }}">
+                        <input type="text" name="nome" value="{{ item[1] }}" required style="width: 100px;">
+                        <input type="text" name="valor_de_entrada" value="{{ item[2] }}" required style="width: 80px;">
+                        <button type="submit" name="editar" class="button">Editar</button>
+                    </form>
+
+                    <!-- Formulário para Excluir Item -->
+                    <form method="post" onsubmit="return confirmAction('Tem certeza que deseja excluir este item?')">
+                        <input type="hidden" name="item_id" value="{{ item[0] }}">
+                        <button type="submit" name="excluir" class="button">Excluir</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    function confirmAction(message) {
+        return confirm(message);
+    }
+</script>
+{% endblock %}

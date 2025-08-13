@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Espeto Carioca</title>
+
+    <!-- Google Fonts: Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: #6f42c1;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .user-info {
+            font-size: 14px;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .header-buttons a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .header-buttons a:hover {
+            background-color: #4b3089;
+        }
+
+        .material-icons {
+            font-size: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 180px;
+            background-color: #6f42c1;
+            color: #fff;
+            padding: 15px;
+            position: fixed;
+            top: 60px;
+            bottom: 0;
+            overflow-y: auto;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            z-index: 1100;
+            box-sizing: border-box;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul li a {
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #010101;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #ff0000;
+        }
+
+        .main-content {
+            margin-left: 180px;
+            padding: 20px;
+            flex: 1;
+            box-sizing: border-box;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        footer {
+            background-color: #6f42c1;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 14px;
+            margin-top: auto; /* Fixo ao final da tela */
+        }
+
+        footer .flash-messages {
+            margin-bottom: 10px;
+        }
+
+        footer .flash-message {
+            padding: 5px;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        footer .flash-message.success { background-color: #28a745; }
+        footer .flash-message.error { background-color: #dc3545; }
+        footer .flash-message.info { background-color: #17a2b8; }
+        footer .flash-message.warning {
+            background-color: #ffc107;
+            color: #222;
+        }
+
+        @media (max-width: 1080px) {
+            .sidebar {
+                width: 100px;
+                top: 50px;
+            }
+
+            .main-content {
+                margin-left: 120px;
+            }
+
+            header h1 {
+                font-size: 20px;
+            }
+
+            .header-buttons a {
+                padding: 6px 10px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: relative;
+                top: 0;
+                bottom: auto;
+                box-shadow: none;
+                display: flex;
+                overflow-x: auto;
+            }
+
+            .sidebar ul {
+                display: flex;
+                gap: 10px;
+            }
+
+            .sidebar ul li {
+                margin-bottom: 0;
+            }
+
+            .sidebar ul li a {
+                padding: 8px 12px;
+                background-color: #ff0606;
+                white-space: nowrap;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Comandas Softlabs</h1>
+        <div class="user-info">
+            <p>Bem-vindo, {{ username }}</p>
+        </div>
+        <div class="header-buttons">
+            <a href="{{ url_for('espettocarioca_inicio') }}">
+                <span class="material-icons">dashboard</span>Dashboard
+            </a>
+            <a href="{{ url_for('espettocarioca_configuracoes') }}">
+                <span class="material-icons">settings</span>Config
+            </a>
+            <a href="{{ url_for('espettocarioca_cardapio') }}">
+                <span class="material-icons">restaurant_menu</span>Cardápio
+            </a>
+            <a href="{{ url_for('logout') }}">
+                <span class="material-icons">logout</span>Sair
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul style="columns: 2; column-gap: 20px; list-style: none; padding: 0; margin: 0;">
+                {% for n in range(1, jinja_min(get_numero_de_mesas(), 49) + 1) %}
+                    <li><a href="{{ url_for('espettocarioca_mesa', mesa_numero=n) }}">{{ "%02d"|format(n) }}</a></li>
+                {% endfor %}
+                {% for n in range(50, jinja_min(get_numero_de_mesas(), 100) + 1) %}
+                    <li><a href="{{ url_for('espettocarioca_mesa', mesa_numero=n) }}">{{ "%02d"|format(n) }}</a></li>
+                {% endfor %}
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            {% block content %}
+            <!-- Conteúdo específico da página aqui -->
+            {% endblock %}
+        </main>
+    </div>
+
+    <footer>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <p>2025 - Softlabs todos os direitos reservados</p>
+    </footer>
+</body>
+
+</html>

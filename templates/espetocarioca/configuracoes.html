@@ -1,0 +1,76 @@
+{% extends "espetocarioca/base.html" %}
+
+{% block content %}
+<style>
+  .config-container {
+    max-width: 500px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-family: 'Roboto', Arial, sans-serif;
+    text-align: left; /* alinhamento à esquerda */
+  }
+
+  .config-container h2 {
+    color: #6f42c1;
+    margin-bottom: 20px;
+  }
+
+  .config-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start; /* inputs e botões alinhados à esquerda */
+  }
+
+  .config-container label {
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  .config-container input[type="number"] {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 50%;
+  }
+
+  .config-container button {
+    background-color: #6f42c1;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .config-container button:hover {
+    background-color: #ff0000;
+  }
+
+  hr {
+    margin: 20px 0;
+    border: none;
+    border-top: 1px solid #ddd;
+    width: 100%;
+  }
+</style>
+
+<div class="config-container">
+  <h2>Configurações</h2>
+
+  <form action="/espettocarioca/configuracoes" method="post">
+    <label for="numero_de_mesas">Número de Mesas:</label>
+    <input type="number" name="numero_de_mesas" value="{{ numero_de_mesas }}" required>
+    <button type="submit" name="action" value="salvar_mesas">Salvar Número de Mesas</button>
+
+    <hr>
+  </form>
+</div>
+
+{% endblock %}

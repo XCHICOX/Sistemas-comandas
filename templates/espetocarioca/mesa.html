@@ -1,0 +1,289 @@
+{% extends "espetocarioca/base.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Comanda Mesa {{ mesa_numero }}</title>
+
+  <!-- Google Fonts: Roboto -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+
+<style>
+    .sidebar {
+    width: 180px;
+    background-color: #6f42c1;
+    color: #fff;
+    position: fixed; /* fixa na tela */
+    top: 60px; /* abaixo do header, ajuste conforme altura do seu header */
+    bottom: 0;
+    left: 0; /* garante que fique à esquerda */
+    overflow-y: auto;
+    padding: 15px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    z-index: 1100;
+}
+
+.main-content {
+    margin-left: 180px; /* mantém espaço da sidebar */
+    padding: 20px;
+    flex: 1;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: left; /* garante alinhamento à esquerda */
+}
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Roboto', Arial, sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+    }
+
+    h1 {
+        color: #6f42c1;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .container {
+    max-width: 700px;
+    flex-direction: row; /* organiza sidebar e main-content lado a lado */
+    justify-content: flex-start; /* conteúdo alinhado ao início (esquerda) */
+    align-items: flex-start; /* alinha ao topo */
+    flex: 1;
+
+    }
+
+    .form-container,
+    .items-container {
+        background: #fff;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .form-container h2,
+    .items-container h2 {
+        margin-top: 0;
+        color: #6f42c1;
+    }
+
+    form label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    form select,
+    form input[type="number"],
+    form input[type="text"] {
+        width: 80%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    .quantity-controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .quantity-controls input {
+        text-align: center;
+        flex: 1;
+    }
+
+    .btn-quantity {
+        background-color: #6f42c1;
+        color: white;
+        border: none;
+        padding: 10px;
+        font-size: 20px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .btn-quantity:hover {
+        background-color: #4b3089;
+    }
+
+    .btn-adicionar,
+    .btn-finalizar,
+    .btn-salvar-pdf,
+    .btn-imprimir {
+        background-color: #6f42c1;
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 5px;
+        font-size: 18px;
+        cursor: pointer;
+        margin-right: 10px;
+        transition: background-color 0.3s;
+    }
+
+    .btn-adicionar:hover,
+    .btn-finalizar:hover,
+    .btn-salvar-pdf:hover,
+    .btn-imprimir:hover {
+        background-color: #ff0000;
+    }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-size: 14px; /* antes era 16px, opcional reduzir */
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 6px 8px;
+  text-align: left;
+  line-height: 1.2;
+}
+
+table th {
+  background-color: #6f42c1;
+  color: white;
+}
+
+    .totais {
+        margin-top: 20px;
+        background: #fff;
+        padding: 15px;
+        border-radius: 6px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .totais h3 {
+        margin: 5px 0;
+        color: #333;
+    }
+
+    .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    form button {
+  background-color: #6f42c1;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  margin-right: 10px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+  font-weight: 500;
+}
+
+form button:hover {
+  background-color: #ff0000;
+}
+
+form button .material-icons {
+  font-size: 20px;
+  line-height: 1;
+}
+.itens-adicionados-scroll {
+  max-height: 300px; /* ajuste conforme a altura desejada */
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+
+
+
+</style>
+</head>
+
+<body>
+
+  <h1>Comanda da Mesa {{ mesa_numero }}</h1>
+
+  <h2>Adicionar Item</h2>
+  <form method="POST">
+    <label for="item_nome">Item:</label>
+    <select name="item_nome" required>
+      {% for item in cardapio_itens %}
+      <option value="{{ item[0] }}">{{ item[0] }} - R${{ '%.2f'|format(item[1]) }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="quantidade">Quantidade:</label>
+    <input type="number" name="quantidade" value="1" min="1" required />
+<button type="submit" name="finalizar_comanda" class="btn-google-style">
+  <span class="material-icons">add</span> ADD
+</button>    
+  </form>
+
+<h2>Itens Adicionados</h2>
+<div class="itens-adicionados-scroll">
+  <table>
+    <tr>
+      <th>Item</th>
+      <th>Valor</th>
+      <th>Quantidade</th>
+      <th>Ação</th>
+    </tr>
+  {% for item in itens_adicionados %}
+  <tr>
+    <td>{{ item[0] }}</td>
+    <td>R${{ '%.2f'|format(item[1]) }}</td>
+    <td>{{ item[2] }}</td>
+    <td>
+<form method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja remover este item? Esta ação não poderá ser desfeita.');">
+  <input type="hidden" name="remover_item_nome" value="{{ item[0] }}">
+  <button type="submit" title="Remover item">
+    <span class="material-icons">remove_circle</span>
+  </button>
+</form>
+    </td>
+  </tr>
+  {% endfor %}
+  </table>
+</div>
+
+  <div class="totais">
+    <h3>Total sem taxa: R${{ '%.2f'|format(total) }}</h3>
+    <h3>Total com taxa (10%): R${{ '%.2f'|format(total_com_taxa) }}</h3>
+  </div>
+
+<form method="POST">
+  <button type="submit" name="finalizar_comanda" onclick="return confirm('Tem certeza que deseja finalizar a comanda? Esta ação não poderá ser desfeita.');">
+    <span class="material-icons">done</span> Finalizar
+  </button>
+  <button type="submit" name="salvar_pdf">
+    <span class="material-icons">save_alt</span> Salvar
+  </button>
+</form>
+
+  <p>Garçon: {{ username }}</p>
+
+</body>
+
+</html>
+{% endblock %}
