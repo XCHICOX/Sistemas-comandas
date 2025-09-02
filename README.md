@@ -23,7 +23,7 @@ Instalação e Execução
 
 Clone o repositório:
 
-git clone https://github.com/SEU_USUARIO/nome_do_repositorio.git
+git clone https://github.com/XCHICOX/Sistemas-comandas.git
 cd nome_do_repositorio
 
 
