@@ -24,6 +24,7 @@ Instalação e Execução
 Clone o repositório:
 
 git clone https://github.com/XCHICOX/Sistemas-comandas.git
+
 cd nome_do_repositorio
 
 
