@@ -18,3 +18,34 @@ Python 3.x
 Bibliotecas necessárias: reportlab, pyinstaller (para gerar o executável)
 
 Impressora térmica compatível conectada
+
+Instalação e Execução
+
+Clone o repositório:
+
+git clone https://github.com/SEU_USUARIO/nome_do_repositorio.git
+cd nome_do_repositorio
+
+
+Instale as dependências:
+
+pip install -r requirements.txt
+
+
+Para gerar o executável:
+
+pyinstaller --onefile seu_arquivo_principal.py
+
+
+Execute o programa:
+
+python seu_arquivo_principal.py
+
+
+ou abra o executável gerado.
+
+Observações
+
+Certifique-se de configurar corretamente a impressora térmica antes de usar.
+
+O PDF é gerado automaticamente para cada comanda, permitindo arquivamento digital e fácil consulta.
